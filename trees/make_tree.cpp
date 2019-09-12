@@ -105,8 +105,14 @@ void printPrettyBFS(Node* const root){
 		std::cout<<"Level "<<level<<": ";
 		while(!qs[whichQ].empty()){
 			ptr = qs[whichQ].front();
-			std::cout<<ptr->data<<" ";
+			std::cout<<ptr->data;
 			qs[whichQ].pop();
+			
+			//delimiters
+			if(!qs[whichQ].empty()){ 
+				std::cout<<", ";
+			}
+
 			if(ptr->right != nullptr){
 				qs[!whichQ].push(ptr->right);
 			}
