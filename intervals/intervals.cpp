@@ -116,6 +116,17 @@ vector<EndPoint> mergeIntervalSet(const vector<pair<int, int>>& A, const vector<
 }
 
 
+bool inInterval(const EndPoint& ep, bool prev_status){
+    bool status;
+    if( ep.start && !prev_status){
+        status = true;
+    }
+    else if(!ep.start && prev_status){
+        status = false;
+    }
+    return status;
+}
+
 vector<pair<int,int>> findIntersection(const vector<pair<int,int>>& A, const vector<pair<int,int>>& B){
     vector<EndPoint> mergedIntervalSet = mergeIntervalSet(A, B);
     vector<pair<int,int>> output;
@@ -129,25 +140,15 @@ vector<pair<int,int>> findIntersection(const vector<pair<int,int>>& A, const vec
     for (auto element: mergedIntervalSet){
         //If in A interval
         if(element.set){
-            if( element.start && !inA){
-                inA = true;
-            }
-            else if(!element.start && inA){
-                inA = false;
-            }
+            inA = inInterval(element, inA);
         }
 
         //If in B interval
         if(!element.set){
-            if(element.start && !inB){
-                inB = true;
-            }
-            else if(!element.start && inB){
-                inB = false;
-            }
+            inB = inInterval(element, inB);
         }
 
-        inIntersection.push_back(inA+inB);      
+        inIntersection.push_back(inA + inB);      
     }
 
     //build output
