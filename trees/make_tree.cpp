@@ -3,17 +3,17 @@
 #include <stack>
 #include <queue>
 
-class node{
+class Node{
 public:
 	int data;
-	node *right, *left;
+	Node *right, *left;
 };
 
 
-void add_element(node* root, int elem){
-	node* new_node = new node;
+void add_element(Node* root, int elem){
+	Node* new_node = new Node;
 	new_node->data = elem;
-	node* ptr = root;
+	Node* ptr = root;
 	bool placed = false;
 	while(!placed){
 		if(ptr->data>elem){
@@ -37,8 +37,9 @@ void add_element(node* root, int elem){
 	}
 }
 
-node* build_tree(std::vector<int> & elements){
-	node* root = new node;
+
+Node* build_tree(const std::vector<int> & elements){
+	Node* root = new Node;
 	root->data = elements[0];
 
 	for(int i = 1; i<elements.size(); i++){
@@ -47,9 +48,10 @@ node* build_tree(std::vector<int> & elements){
 	return root;
 }
 
-void print_dfs(node* root){
-	std::stack<node*> s;
-	node* ptr = root;
+
+void print_dfs(Node* const root){
+	std::stack<Node*> s;
+	Node* ptr = root;
 	s.push(root);
 	while(!s.empty()){
 		ptr = s.top();
@@ -64,9 +66,10 @@ void print_dfs(node* root){
 	}
 }
 
-void print_bfs(node* root){
-	std::queue<node*> q;
-	node* ptr = root;
+
+void print_bfs(Node* const root){
+	std::queue<Node*> q;
+	Node* ptr = root;
 	q.push(root);
 	while(!q.empty()){
 		ptr = q.front();
@@ -79,13 +82,56 @@ void print_bfs(node* root){
 		}
 		std::cout<<ptr->data<<std::endl;
 	}
-
 }
 
+
+void printPrettyBFS(Node* const root){
+	//container construction
+	std::queue<Node*> q1, q2;
+	std::vector<std::queue<Node*>> qs = {q1, q2};
+	
+	//Level Label
+	int level = 0;
+	//queue control index
+	bool whichQ = false;
+	//tmp node pointer
+	Node* ptr;
+
+	//initialization
+	qs[0].push(root);
+
+	//Pretty printing
+	while(not (qs[0].empty() and qs[1].empty())){
+		std::cout<<"Level "<<level<<": ";
+		while(!qs[whichQ].empty()){
+			ptr = qs[whichQ].front();
+			std::cout<<ptr->data<<" ";
+			qs[whichQ].pop();
+			if(ptr->right != nullptr){
+				qs[!whichQ].push(ptr->right);
+			}
+			if(ptr->left != nullptr){
+				qs[!whichQ].push(ptr->left);
+			}
+		}
+		level++;
+		whichQ = not(whichQ);
+		std::cout<<std::endl;
+	}
+}
+
+
 int main(){
-	std::vector<int> v = {5,2, 1, 3, 7, 6 , 8};
-	node* root = build_tree(v);
+	std::vector<int> v = {5, 2, 1, 3, 7, 6 , 8};
+	Node* root = build_tree(v);
+	std::cout<<"BREATH FIRST: "<<std::endl;
 	print_bfs(root);
+
+	std::cout<<"\nDEPTH FIRST: "<<std::endl;
 	print_dfs(root);
+
+	std::cout<<"\nPRETTY BREATH FIRST"<<std::endl;
+	printPrettyBFS(root);
+
 	return 0;
 }
