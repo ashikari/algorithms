@@ -64,20 +64,20 @@ vector<pair<int,int>> generate_intervals(const vector<int>& endpoints) {
 }
 
 
-void trimEndpoints(const vector<EndPoint>& tmp, vector<EndPoint>& out){
-    out.push_back(tmp[0]);
-    for (int idx=1; idx<tmp.size(); idx++){
-        if (tmp[idx].start){
+void trimEndpoints(const vector<EndPoint>& raw, vector<EndPoint>& out){
+    out.push_back(raw[0]);
+    for (int idx=1; idx<raw.size(); idx++){
+        if (raw[idx].start){
             if( not(out[out.size()-1].start)){
-                out.push_back(tmp[idx]);
+                out.push_back(raw[idx]);
             }
         }
         else{
             if(not( !out[out.size()-1].start)){
-                out.push_back(tmp[idx]);
+                out.push_back(raw[idx]);
             }
             else{
-                out[out.size()-1] =tmp[idx];
+                out[out.size()-1] = raw[idx];
             }
         }
     }
